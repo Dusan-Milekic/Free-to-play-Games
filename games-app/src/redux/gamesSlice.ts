@@ -21,12 +21,15 @@ interface Game {
 interface IGamesState {
   games: Game[];
   time: number;
+  gamesbyName: Game[];
 }
 
 // Početno stanje
 const initialState: IGamesState = {
   games: [],
+
   time: 0,
+  gamesbyName: [],
 };
 
 // Async thunk za dohvatanje igara
@@ -49,6 +52,16 @@ export const gamesSlice = createSlice({
     clearGames: (state) => {
       state.games = [];
       state.time = 0; // Reset time takođe
+      state.gamesbyName = [];
+    },
+    searchGamebyName: (state, action) => {
+      const searchTerm = action.payload.toLowerCase();
+      state.gamesbyName = state.games.filter((g) =>
+        g.title.toLowerCase().startsWith(searchTerm)
+      );
+    },
+    clearSearchResults: (state) => {
+      state.gamesbyName = [];
     },
   },
   extraReducers: (builder) => {
@@ -59,10 +72,12 @@ export const gamesSlice = createSlice({
   },
 });
 
-export const { clearGames } = gamesSlice.actions;
+export const { clearGames, searchGamebyName } = gamesSlice.actions;
 
 // Selektori
 export const selectGames = (state: RootState) => state.allGames.games;
 export const selectTime = (state: RootState) => state.allGames.time;
+export const selectGamesbyName = (state: RootState) =>
+  state.allGames.gamesbyName;
 
 export default gamesSlice.reducer;
