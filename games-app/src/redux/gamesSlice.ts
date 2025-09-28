@@ -27,7 +27,6 @@ interface IGamesState {
 // Početno stanje
 const initialState: IGamesState = {
   games: [],
-
   time: 0,
   gamesbyName: [],
 };
@@ -60,6 +59,7 @@ export const gamesSlice = createSlice({
         g.title.toLowerCase().startsWith(searchTerm)
       );
     },
+
     clearSearchResults: (state) => {
       state.gamesbyName = [];
     },
